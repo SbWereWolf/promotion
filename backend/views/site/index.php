@@ -12,6 +12,7 @@ $this->title = 'ROBOTS Corporation Inventory';
         <h1>ROBOTS Corporation Inventory</h1>
 
         <p class="lead">Operator menu</p>
+        <p><a class="btn btn-default" href="<?= Url::to(['site/inventory']); ?>">Просмотр Инвенторя</a></p>
 
     </div>
 
@@ -23,12 +24,12 @@ $this->title = 'ROBOTS Corporation Inventory';
                 <p>Люди используют Сервисы с помощью Аккаунтов.</p>
             </div>
             <div class="col-lg-2">
-                <h2>Service</h2>
+                <h2>Сервисы</h2>
                 <p>Сервисы которыми могут воспользоваться Люди.</p>
                 <p><a class="btn btn-default" href="<?= Url::to(['service/index']); ?>">Работать с Сервисами</a></p>
             </div>
             <div class="col-lg-3">
-                <h2>Account</h2>
+                <h2>Аккаунты</h2>
                 <p>Аккаунты зареганные на Сервисах.</p>
                 <p><a class="btn btn-default" href="<?= Url::to(['account/index']); ?>">Работать с Аккаунтами</a></p>
             </div>

@@ -14,9 +14,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'is_hidden')->checkbox() ?>
 
-    <?= $form->field($model, 'code')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'code')->textInput() ?>
 
-    <?= $form->field($model, 'title')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'title')->textInput() ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 

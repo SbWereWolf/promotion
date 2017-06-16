@@ -12,3 +12,4 @@ composer.lock
 configuration/*
 .htaccess
 .htpasswd
+.htgroup

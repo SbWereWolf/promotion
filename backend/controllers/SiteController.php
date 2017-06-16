@@ -12,6 +12,16 @@ use common\models\LoginForm;
  */
 class SiteController extends Controller
 {
+
+    /**
+     * Lists all Inventory.
+     * @return mixed
+     */
+    public function actionInventory()
+    {
+        return $this->render('inventory');
+    }
+
     /**
      * @inheritdoc
      */
@@ -22,11 +32,11 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'index'],
+                        'actions' => ['login', 'error', 'index','inventory'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'error', 'index','inventory'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

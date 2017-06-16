@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Service;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -22,7 +23,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'is_hidden:boolean',
-            'service_id',
+            //'service_id',
+            [
+                'attribute' => 'service_id',
+                'label' => 'Сервис',
+                'value' => function ($model) {
+                    $serviceCode = Service::find()
+                        ->select('code')
+                        ->where(['=', 'id', $model->service_id])
+                        ->scalar();
+
+                    return $serviceCode;
+                },
+                'format' => 'raw',
+            ],
             'login:ntext',
             'password:ntext',
             'description:ntext',

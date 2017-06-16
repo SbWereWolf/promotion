@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Service;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -14,11 +15,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'is_hidden')->checkbox() ?>
 
-    <?= $form->field($model, 'service_id')->textInput() ?>
+    <?php
+    $serviceName = Service::find()
+        ->select('code')
+        ->where(['=', 'id', $model->service_id])
+        ->scalar()
+    ?>
+    <?= Html::label('Сервис'); ?>
+    <?= $serviceName ?>
 
-    <?= $form->field($model, 'login')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'password')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'login')->textInput() ?>
+
+    <?= $form->field($model, 'password')->textInput() ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 

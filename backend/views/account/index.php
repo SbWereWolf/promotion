@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\AccountSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Accounts';
+$this->title = 'Аккаунты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="account-index">
@@ -15,24 +15,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Account', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'insert_date',
             'is_hidden:boolean',
             'service_id',
             'login:ntext',
-            // 'password:ntext',
-            // 'description:ntext',
+            'password:ntext',
+            'description:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{update} или {view} ',],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

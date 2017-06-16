@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS tag_service;
 DROP TABLE IF EXISTS tag_account;
+DROP TABLE IF EXISTS account_post;
 DROP TABLE IF EXISTS person_account;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS account;

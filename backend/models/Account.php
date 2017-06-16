@@ -52,13 +52,13 @@ class Account extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'service_id' => 'Service ID',
-            'login' => 'Login',
-            'password' => 'Password',
-            'description' => 'Description',
+            'id' => 'Идентификатор',
+            'insert_date' => 'Дата добавления',
+            'is_hidden' => 'Скрытая',
+            'service_id' => 'Ссылка на Сервис',
+            'login' => 'Логин',
+            'password' => 'Пароль',
+            'description' => 'Примечание',
         ];
     }
 

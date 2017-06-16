@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $model backend\models\Service */
 
 $this->title = 'Update Service: ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Services', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Сервисы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактировать';
 ?>
 <div class="service-update">
 

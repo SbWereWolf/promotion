@@ -47,11 +47,11 @@ class PersonAccount extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'person_id' => 'Person ID',
-            'account_id' => 'Account ID',
+            'id' => 'Идентификатор',
+            'insert_date' => 'Дата добавления',
+            'is_hidden' => 'Скрытая',
+            'person_id' => 'Ссылка на Человека',
+            'account_id' => 'Ссылка на Аккаунт',
         ];
     }
 

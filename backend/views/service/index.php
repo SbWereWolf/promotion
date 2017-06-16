@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\ServiceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Services';
+$this->title = 'Сервисы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="service-index">
@@ -15,9 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Service', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,13 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'insert_date',
             'is_hidden:boolean',
             'code:ntext',
             'title:ntext',
-            // 'description:ntext',
+            'description:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view}',],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

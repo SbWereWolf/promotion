@@ -14,6 +14,7 @@ use Yii;
  * @property string $title
  * @property string $description
  *
+ * @property PersonAccount[] $personAccounts
  * @property PersonServiceAccount[] $personServiceAccounts
  */
 class Person extends \yii\db\ActiveRecord
@@ -45,13 +46,21 @@ class Person extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'code' => 'Code',
-            'title' => 'Title',
-            'description' => 'Description',
+            'id' => 'Идентификатор',
+            'insert_date' => 'Дата добавления',
+            'is_hidden' => 'Скрытая',
+            'code' => 'Код',
+            'title' => 'Наименование',
+            'description' => 'Примечание',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPersonAccounts()
+    {
+        return $this->hasMany(PersonAccount::className(), ['person_id' => 'id'])->inverseOf('person');
     }
 
     /**

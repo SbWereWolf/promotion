@@ -35,7 +35,7 @@ class TagAccount extends \yii\db\ActiveRecord
             [['insert_date'], 'safe'],
             [['is_hidden'], 'boolean'],
             [['tag_id', 'account_id'], 'integer'],
-            [['tag_id', 'account_id'], 'unique', 'targetAttribute' => ['tag_id', 'account_id'], 'message' => 'The combination of Tag ID and Account ID has already been taken.'],
+            [['tag_id', 'account_id'], 'unique', 'targetAttribute' => ['tag_id', 'account_id'], 'message' => 'The combination of Ссылка на Тэг and Ссылка на Аккаунт has already been taken.'],
             [['account_id'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['account_id' => 'id']],
             [['tag_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tag::className(), 'targetAttribute' => ['tag_id' => 'id']],
         ];
@@ -47,11 +47,11 @@ class TagAccount extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'tag_id' => 'Tag ID',
-            'account_id' => 'Account ID',
+            'id' => 'Идентификатор',
+            'insert_date' => 'Дата добавления',
+            'is_hidden' => 'Скрытая',
+            'tag_id' => 'Ссылка на Тэг',
+            'account_id' => 'Ссылка на Аккаунт',
         ];
     }
 

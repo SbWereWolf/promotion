@@ -35,7 +35,7 @@ class AccountPost extends \yii\db\ActiveRecord
             [['insert_date'], 'safe'],
             [['is_hidden'], 'boolean'],
             [['account_id', 'post_id'], 'integer'],
-            [['post_id', 'account_id'], 'unique', 'targetAttribute' => ['post_id', 'account_id'], 'message' => 'The combination of Account ID and Post ID has already been taken.'],
+            [['post_id', 'account_id'], 'unique', 'targetAttribute' => ['post_id', 'account_id'], 'message' => 'The combination of Ссылка на Аккаунт and Ссылка на Заметку has already been taken.'],
             [['account_id'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['account_id' => 'id']],
             [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::className(), 'targetAttribute' => ['post_id' => 'id']],
         ];
@@ -47,11 +47,11 @@ class AccountPost extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'account_id' => 'Account ID',
-            'post_id' => 'Post ID',
+            'id' => 'Идентификатор',
+            'insert_date' => 'Дата добавления',
+            'is_hidden' => 'Скрытая',
+            'account_id' => 'Ссылка на Аккаунт',
+            'post_id' => 'Ссылка на Заметку',
         ];
     }
 

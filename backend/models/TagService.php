@@ -35,7 +35,8 @@ class TagService extends \yii\db\ActiveRecord
             [['insert_date'], 'safe'],
             [['is_hidden'], 'boolean'],
             [['tag_id', 'service_id'], 'integer'],
-            [['tag_id', 'service_id'], 'unique', 'targetAttribute' => ['tag_id', 'service_id'], 'message' => 'The combination of Tag ID and Service ID has already been taken.'],
+            [['tag_id', 'service_id'], 'unique', 'targetAttribute' => ['tag_id', 'service_id'], 'message' => 'The combination of Ссылка на Тэг and Ссылка на Сервис has already been taken.'],
+            [['tag_id', 'service_id'], 'unique', 'targetAttribute' => ['tag_id', 'service_id'], 'message' => 'The combination of Ссылка на Тэг and Ссылка на Сервис has already been taken.'],
             [['service_id'], 'exist', 'skipOnError' => true, 'targetClass' => Service::className(), 'targetAttribute' => ['service_id' => 'id']],
             [['tag_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tag::className(), 'targetAttribute' => ['tag_id' => 'id']],
         ];
@@ -47,11 +48,11 @@ class TagService extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'tag_id' => 'Tag ID',
-            'service_id' => 'Service ID',
+            'id' => 'Идентификатор',
+            'insert_date' => 'Дата добавления',
+            'is_hidden' => 'Скрытая',
+            'tag_id' => 'Ссылка на Тэг',
+            'service_id' => 'Ссылка на Сервис',
         ];
     }
 

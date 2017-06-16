@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Account */
 
-$this->title = 'Update Account: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Accounts', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Редактировать Аккаунт: ' . $model->login;
+$this->params['breadcrumbs'][] = ['label' => 'Аккаунты', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->login, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="account-update">
 

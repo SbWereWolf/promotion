@@ -32,7 +32,6 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['insert_date'], 'safe'],
             [['is_hidden'], 'boolean'],
             [['title', 'body'], 'string'],
         ];
@@ -44,11 +43,9 @@ class Post extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'title' => 'Title',
-            'body' => 'Body',
+            'is_hidden' => 'Скрытая',
+            'title' => 'Наименование',
+            'body' => 'Содержимое',
         ];
     }
 

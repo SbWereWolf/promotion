@@ -14,6 +14,7 @@ use Yii;
  * @property string $title
  * @property string $description
  *
+ * @property Account[] $accounts
  * @property ServiceAccount[] $serviceAccounts
  * @property TagService[] $tagServices
  * @property Tag[] $tags
@@ -47,13 +48,21 @@ class Service extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'insert_date' => 'Insert Date',
-            'is_hidden' => 'Is Hidden',
-            'code' => 'Code',
-            'title' => 'Title',
-            'description' => 'Description',
+            'id' => 'Идентификатор',
+            'insert_date' => 'Дата добавления',
+            'is_hidden' => 'Скрытая',
+            'code' => 'Код',
+            'title' => 'Наименование',
+            'description' => 'Примечание',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAccounts()
+    {
+        return $this->hasMany(Account::className(), ['service_id' => 'id'])->inverseOf('service');
     }
 
     /**

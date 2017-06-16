@@ -20,20 +20,22 @@ $this->title = 'ROBOTS Corporation Inventory';
         <div class="row">
             <div class="col-lg-2">
                 <h2>Person</h2>
-                <p>Персоны используют Сервисы с помощью Аккаунтов.</p>
+                <p>Люди используют Сервисы с помощью Аккаунтов.</p>
             </div>
             <div class="col-lg-2">
                 <h2>Service</h2>
-                <p>Сервисы которыми могут воспользоваться Персоны.</p>
+                <p>Сервисы которыми могут воспользоваться Люди.</p>
+                <p><a class="btn btn-default" href="<?= Url::to(['service/index']); ?>">Работать с Сервисами</a></p>
             </div>
             <div class="col-lg-3">
                 <h2>Account</h2>
                 <p>Аккаунты зареганные на Сервисах.</p>
+                <p><a class="btn btn-default" href="<?= Url::to(['account/index']); ?>">Работать с Аккаунтами</a></p>
             </div>
             <div class="col-lg-3">
-                <h2>Post</h2>
-                <p>Посты для размещения на сервисах.</p>
-                <p><a class="btn btn-default" href="<?= Url::to(['post/index']); ?>">Работать с Постави</a></p>
+                <h2>Заметки</h2>
+                <p>Заметки для размещения на сервисах.</p>
+                <p><a class="btn btn-default" href="<?= Url::to(['post/index']); ?>">Работать с Заметками</a></p>
             </div>
             <div class="col-lg-2">
                 <h2>Tag</h2>

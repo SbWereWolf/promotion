@@ -25,7 +25,7 @@ class AccountController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view','update'],
+                        'actions' => ['index','view','update', 'free_proxy'],
                         'allow' => true,
                     ],
                     [
@@ -42,6 +42,15 @@ class AccountController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     * Lists all Inventory.
+     * @return mixed
+     */
+    public function actionFree_proxy()
+    {
+        return $this->render('free_proxy');
     }
 
     /**

@@ -81,7 +81,7 @@ SELECT
   WHERE
    ps.id = p.id
    AND t.code = 'PROXY'
-  ) AS login_proxy_ru, 
+  ) AS login_proxy, 
   (
   SELECT 
   a.password 
@@ -99,7 +99,7 @@ SELECT
   WHERE
    ps.id = p.id
    AND t.code = 'PROXY'
-  ) AS password_proxy_ru, 
+  ) AS password_proxy, 
   (
   SELECT 
   s.code 
@@ -117,7 +117,7 @@ SELECT
   WHERE
    ps.id = p.id
    AND t.code = 'PROXY'
-  ) AS address_proxy_ru
+  ) AS address_proxy
   
 FROM 
   person p
@@ -172,13 +172,13 @@ if($isExists):
                     <?= $index ?>
                 </td>
                 <td>
-                    <?= $row['login_proxy_ru'] ?>
+                    <?= $row['login_proxy'] ?>
                 </td>
                 <td>
-                    <?= $row['password_proxy_ru'] ?>
+                    <?= $row['password_proxy'] ?>
                 </td>
                 <td>
-                    <?= $row['address_proxy_ru'] ?>
+                    <?= $row['address_proxy'] ?>
                 </td>
                 <td>
                     <?= $row['login_pikabu_ru'] ?>

@@ -11,5 +11,3 @@ composer.lock
 #application specific
 configuration/*
 .htaccess
-.htpasswd
-.htgroup

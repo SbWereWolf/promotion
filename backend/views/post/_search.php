@@ -21,6 +21,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'body') ?>
 
+    <?= $form->field($model, 'bulk_tags') ?>
+
     <div class="form-group">
         <?= Html::submitButton('Искать', ['class' => 'btn btn-primary']) ?>
         <?= Html::resetButton('Сбросить', ['class' => 'btn btn-default']) ?>

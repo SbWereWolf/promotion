@@ -19,7 +19,7 @@ class PostSearch extends Post
     {
         return [
             [['id'], 'integer'],
-            [['insert_date', 'title', 'body'], 'safe'],
+            [['insert_date', 'title', 'body','bulk_tags'], 'safe'],
             [['is_hidden'], 'boolean'],
         ];
     }
@@ -66,7 +66,8 @@ class PostSearch extends Post
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'body', $this->body]);
+            ->andFilterWhere(['like', 'body', $this->body])
+            ->andFilterWhere(['like', 'bulk_tags', $this->bulk_tags]);
 
         return $dataProvider;
     }

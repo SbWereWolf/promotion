@@ -12,6 +12,7 @@ use Yii;
  * @property boolean $is_hidden
  * @property string $title
  * @property string $body
+ * @property string $bulk_tags
  *
  * @property AccountPost[] $accountPosts
  * @property Account[] $accounts
@@ -33,7 +34,7 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['is_hidden'], 'boolean'],
-            [['title', 'body'], 'string'],
+            [['title', 'body','bulk_tags'], 'string'],
         ];
     }
 
@@ -46,6 +47,7 @@ class Post extends \yii\db\ActiveRecord
             'is_hidden' => 'Скрытая',
             'title' => 'Наименование',
             'body' => 'Содержимое',
+            'bulk_tags' => 'Облако тегов',
         ];
     }
 

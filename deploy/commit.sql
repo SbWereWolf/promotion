@@ -58,7 +58,8 @@ CREATE TABLE public.account
 );
 CREATE UNIQUE INDEX ux_account_service_id_login
   ON public.account (service_id, login);
-CREATE INDEX ix_account_login ON public.account (login);
+CREATE INDEX ix_account_login
+  ON public.account (login);
 
 COMMENT ON COLUMN public.account.id IS 'Идентификатор';
 COMMENT ON COLUMN public.account.insert_date IS 'Дата добавления';
@@ -177,7 +178,8 @@ CREATE TABLE public.post
   insert_date TIMESTAMP WITH TIME ZONE DEFAULT now(),
   is_hidden   BOOLEAN                  DEFAULT FALSE,
   title       TEXT,
-  body        TEXT
+  body        TEXT,
+  bulk_tags   TEXT
 );
 
 COMMENT ON COLUMN public.post.id IS 'Идентификатор';
@@ -185,6 +187,7 @@ COMMENT ON COLUMN public.post.insert_date IS 'Дата добавления';
 COMMENT ON COLUMN public.post.is_hidden IS 'Скрытая';
 COMMENT ON COLUMN public.post.title IS 'Наименование';
 COMMENT ON COLUMN public.post.body IS 'Содержимое';
+COMMENT ON COLUMN public.post.bulk_tags IS 'Облако тегов';
 COMMENT ON TABLE public.post IS 'Заметки';
 
 CREATE TABLE public.account_post

@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'is_hidden:boolean',
             'title:ntext',
             'body:ntext',
+            'bulk_tags:ntext',
 
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{update} или {view} ',],

@@ -18,20 +18,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Person', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?php Pjax::begin(); ?>
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'insert_date',
+            // 'id',
+            // 'insert_date',
             'is_hidden:boolean',
             'code:ntext',
             'title:ntext',
-            // 'description:ntext',
+            'description:ntext',
+            [
+                'attribute' => 'account_count',
+                'label' => 'Количество аккаунтов',
+                'value' => function ($model) {
+
+                    $count = \backend\models\PersonAccount::find()
+                        ->select('count(*)')
+                        ->where(['=', 'person_id', $model->id])
+                        ->scalar();
+
+                    $count = intval($count);
+
+                    return $count;
+                },
+                'format' => 'html',
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+<?php Pjax::end(); ?>
+</div>

@@ -25,11 +25,11 @@ class PersonAccountController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view','unlink'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index','view','create','update','delete'],
+                        'actions' => ['index','view','create','update','delete','unlink'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -42,6 +42,20 @@ class PersonAccountController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionUnlink($account_id,$person_id)
+    {
+        /*
+        $account_id = intval($account_id);
+        $person_id = intval($person_id);
+
+        PersonAccount::find()
+            ->where('person_id = :PERSON AND account_id = :ACCOUNT',
+            ['PERSON'=>$person_id,'ACCOUNT'=>$account_id])
+            ->one()
+            ->delete();
+        */
     }
 
     /**

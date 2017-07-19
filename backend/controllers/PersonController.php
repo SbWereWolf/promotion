@@ -5,6 +5,8 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Person;
 use backend\models\PersonSearch;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -25,7 +27,7 @@ class PersonController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view','update','create'],
                         'allow' => true,
                     ],
                     [
@@ -66,8 +68,11 @@ class PersonController extends Controller
      */
     public function actionView($id)
     {
+        $accountProvider = $this->setAccountProvider($id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'accountProvider' => $accountProvider,
         ]);
     }
 
@@ -102,8 +107,11 @@ class PersonController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $accountProvider = $this->setAccountProvider($id);
+
             return $this->render('update', [
                 'model' => $model,
+                'accountProvider' => $accountProvider,
             ]);
         }
     }
@@ -135,5 +143,38 @@ class PersonController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * @param $id
+     * @return ActiveDataProvider
+     */
+    private function setAccountProvider($id):ActiveDataProvider
+    {
+        $id = intval($id);
+
+        $query = (new Query())
+            ->select([
+                'account_id' => 'pa.account_id',
+                'person_id' => 'pa.person_id',
+                'service' => 's.code',
+                'login' => 'a.login',
+                'password' => 'a.password',
+                'description' => 'a.description'
+            ])
+            ->from('person p')
+            ->innerJoin('person_account pa', 'p.id = pa.person_id')
+            ->innerJoin('account a', 'pa.account_id = a.id')
+            ->innerJoin('service s', 'a.service_id = s.id')
+            ->where('p.id = :ID', ['ID' => $id]);
+
+        $accountProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        return $accountProvider;
     }
 }

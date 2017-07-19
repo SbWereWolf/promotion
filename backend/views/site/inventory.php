@@ -4,7 +4,7 @@
 
 use backend\models\Person;
 
-$this->title = 'ROBOTS Corporation Inventory';
+$this->title = 'Persons and them accounts';
 
 $sql = "
 SELECT 
@@ -117,10 +117,30 @@ SELECT
   WHERE
    ps.id = p.id
    AND t.code = 'PROXY'
-  ) AS address_proxy
+  ) AS address_proxy, 
+  (
+  SELECT 
+  t.code 
+  FROM person ps 
+  JOIN person_account pa
+  ON ps.id = pa.person_id
+  JOIN account a 
+  ON pa.account_id = a.id
+  JOIN service s ON 
+  a.service_id = s.id
+  JOIN tag_account ts 
+  ON a.id = ts.account_id
+  JOIN tag t 
+  ON ts.tag_id = t.id
+  WHERE
+   ps.id = p.id
+   AND s.code = 'PIKABU_RU'
+   LIMIT 1
+  ) AS pikabu_tag
   
 FROM 
   person p
+  ORDER BY p.id
 ;
 ";
 
@@ -159,6 +179,9 @@ if($isExists):
             <th>
                 mail password
             </th>
+            <th>
+                pikabu tag
+            </th>
         </tr>
         </thead>
         <tfoot>
@@ -191,6 +214,9 @@ if($isExists):
                 </td>
                 <td>
                     <?= $row['password_mail_ru'] ?>
+                </td>
+                <td>
+                    <?= $row['pikabu_tag'] ?>
                 </td>
             </tr>
         <?php endforeach; ?>

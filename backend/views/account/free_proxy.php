@@ -4,7 +4,7 @@
 
 use backend\models\Person;
 
-$this->title = 'ROBOTS Corporation Inventory';
+$this->title = 'Free Proxy';
 
 $sql = "
 SELECT
@@ -23,7 +23,8 @@ LEFT JOIN person_account pa
     ON a.id = pa.account_id
 WHERE
   t.code = 'PROXY'
-  AND pa.id IS NULL;
+  AND pa.id IS NULL
+  ORDER BY a.id
 ;
 ";
 

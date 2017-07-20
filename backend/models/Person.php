@@ -15,7 +15,6 @@ use Yii;
  * @property string $description
  *
  * @property PersonAccount[] $personAccounts
- * @property PersonServiceAccount[] $personServiceAccounts
  */
 class Person extends \yii\db\ActiveRecord
 {
@@ -61,14 +60,6 @@ class Person extends \yii\db\ActiveRecord
     public function getPersonAccounts()
     {
         return $this->hasMany(PersonAccount::className(), ['person_id' => 'id'])->inverseOf('person');
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPersonServiceAccounts()
-    {
-        return $this->hasMany(PersonServiceAccount::className(), ['person_id' => 'id'])->inverseOf('person');
     }
 
     /**

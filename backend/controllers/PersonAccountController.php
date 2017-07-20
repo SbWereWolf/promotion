@@ -2,13 +2,14 @@
 
 namespace backend\controllers;
 
-use Yii;
 use backend\models\PersonAccount;
 use backend\models\PersonAccountSearch;
+use Yii;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PersonAccountController implements the CRUD actions for PersonAccount model.
@@ -25,11 +26,11 @@ class PersonAccountController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view','unlink'],
+                        'actions' => ['index', 'view','link'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index','view','create','update','delete','unlink'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,18 +45,15 @@ class PersonAccountController extends Controller
         ];
     }
 
-    public function actionUnlink($account_id,$person_id)
+    public function actionLink()
     {
-        /*
-        $account_id = intval($account_id);
-        $person_id = intval($person_id);
+        if (isset($_POST['key_list']) && isset($_POST['person_id'])) {
+            $keys = $_POST['key_list'];
+            $person_id = $_POST['person_id'];
 
-        PersonAccount::find()
-            ->where('person_id = :PERSON AND account_id = :ACCOUNT',
-            ['PERSON'=>$person_id,'ACCOUNT'=>$account_id])
-            ->one()
-            ->delete();
-        */
+
+            PersonAccount::linkAccountWithPerson($keys, $person_id);
+        }
     }
 
     /**
@@ -150,4 +148,6 @@ class PersonAccountController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+
 }

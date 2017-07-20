@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\PersonAccount;
 use Yii;
 use backend\models\Person;
 use backend\models\PersonSearch;
@@ -27,11 +28,11 @@ class PersonController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view','update','create'],
+                        'actions' => ['index','view','update','create','unlink'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index','view','create','update','delete'],
+                        'actions' => ['index','view','create','update','delete','unlink'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,6 +45,28 @@ class PersonController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionUnlink($person_id,$account_id)
+    {
+
+        $account_id = intval($account_id);
+        $person_id = intval($person_id);
+
+/*
+        PersonAccount::find()
+            ->where('person_id = :PERSON AND account_id = :ACCOUNT',
+            ['PERSON'=>$person_id,'ACCOUNT'=>$account_id])
+            ->one()
+            ->delete();
+        */
+
+        $accountProvider = $this->setAccountProvider($person_id);
+
+        return $this->renderPartial('person_account', [
+            'accountProvider' => $accountProvider,
+        ]);
+
     }
 
     /**
@@ -160,7 +183,7 @@ class PersonController extends Controller
                 'service' => 's.code',
                 'login' => 'a.login',
                 'password' => 'a.password',
-                'description' => 'a.description'
+                'description' => 'a.description',
             ])
             ->from('person p')
             ->innerJoin('person_account pa', 'p.id = pa.person_id')
@@ -173,6 +196,28 @@ class PersonController extends Controller
             'pagination' => [
                 'pageSize' => 10,
             ],
+        ]);
+
+        $accountProvider->setSort([
+            'attributes' => [
+                'service' => [
+                    'asc' => ['service' => SORT_ASC],
+                    'desc' => ['service' => SORT_DESC],
+                ],
+                'login' => [
+                    'asc' => ['login' => SORT_ASC],
+                    'desc'=> ['login' => SORT_DESC],
+                ],
+                'password' => [
+                    'asc' => ['password' => SORT_ASC],
+                    'desc'=> ['password' => SORT_DESC],
+                ],
+                'description' => [
+                    'asc' => ['description' => SORT_ASC],
+                    'desc'=> ['description' => SORT_DESC],
+                ],
+            ],
+            'defaultOrder' => ['service' => SORT_DESC],
         ]);
 
         return $accountProvider;

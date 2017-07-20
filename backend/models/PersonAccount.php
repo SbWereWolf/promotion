@@ -56,6 +56,20 @@ class PersonAccount extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $keys
+     * @param $person_id
+     */
+    public static function linkAccountWithPerson($keys, $person_id)
+    {
+        foreach ($keys as $account_id) {
+            $model = new PersonAccount();
+            $model->account_id = $account_id;
+            $model->person_id = $person_id;
+            $model->save();
+        }
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getAccount()

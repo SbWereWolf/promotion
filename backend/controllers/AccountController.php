@@ -2,9 +2,12 @@
 
 namespace backend\controllers;
 
+use backend\models\Person;
 use Yii;
 use backend\models\Account;
 use backend\models\AccountSearch;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -25,7 +28,7 @@ class AccountController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view','update', 'free_proxy'],
+                        'actions' => ['index','view','update', 'free_proxy','link'],
                         'allow' => true,
                     ],
                     [
@@ -42,6 +45,22 @@ class AccountController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionLink($person_id)
+    {
+        $person_id = intval($person_id);
+        $person = Person::find()->where('id = :ID',['ID'=>$person_id])->one();
+
+        $searchModel = new AccountSearch();
+        $dataProvider = $this->setAccountProvider();
+
+        return $this->render('link', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'person_id' => $person_id,
+            'person'=>$person
+        ]);
     }
 
     /**
@@ -144,5 +163,61 @@ class AccountController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * @return ActiveDataProvider
+     * @internal param $id
+     */
+    private function setAccountProvider():ActiveDataProvider
+    {
+        $query = (new Query())
+            ->select([
+                'is_hidden'=>'a.is_hidden',
+                'account_id' => 'a.id',
+                'service' => 's.code',
+                'login' => 'a.login',
+                'password' => 'a.password',
+                'description' => 'a.description',
+            ])
+            ->from('account a')
+            ->innerJoin('service s', 'a.service_id = s.id')
+            ->leftJoin('person_account pa', 'a.id = pa.account_id')
+            ->where('pa.account_id IS NULL');
+
+        $accountProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+        ]);
+
+        $accountProvider->setSort([
+            'attributes' => [
+                'service' => [
+                    'asc' => ['service' => SORT_ASC],
+                    'desc' => ['service' => SORT_DESC],
+                ],
+                'login' => [
+                    'asc' => ['login' => SORT_ASC],
+                    'desc'=> ['login' => SORT_DESC],
+                ],
+                'password' => [
+                    'asc' => ['password' => SORT_ASC],
+                    'desc'=> ['password' => SORT_DESC],
+                ],
+                'description' => [
+                    'asc' => ['description' => SORT_ASC],
+                    'desc'=> ['description' => SORT_DESC],
+                ],
+                'is_hidden'=>[
+                    'asc' => ['is_hidden' => SORT_ASC],
+                    'desc'=> ['is_hidden' => SORT_DESC],
+                ],
+            ],
+            'defaultOrder' => ['service' => SORT_DESC],
+        ]);
+
+        return $accountProvider;
     }
 }

@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'login',
                 'label' => 'Логин',
                 'content'=>function($data){
-                    return Html::a($data['login'], ['account/view', 'id' => $data['id']]);
+                    return Html::a($data['login'], ['account/view', 'id' => $data['account_id']]);
                 }
             ],
             'password:html:Пароль',

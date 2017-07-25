@@ -2,13 +2,17 @@
 
 namespace backend\controllers;
 
-use Yii;
 use backend\models\Account;
 use backend\models\AccountSearch;
+use backend\models\Person;
+use backend\models\TagAccount;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * AccountController implements the CRUD actions for Account model.
@@ -25,7 +29,7 @@ class AccountController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view','update', 'free_proxy'],
+                        'actions' => ['index','view','update', 'free_proxy','link','unlink'],
                         'allow' => true,
                     ],
                     [
@@ -42,6 +46,37 @@ class AccountController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionLink($person_id)
+    {
+        $person_id = intval($person_id);
+        $person = Person::find()->where('id = :ID',['ID'=>$person_id])->one();
+
+        $searchModel = new AccountSearch();
+        $dataProvider = self::setAccountProvider();
+
+        return $this->render('link', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'person_id' => $person_id,
+            'person'=>$person
+        ]);
+    }
+
+    public function actionUnlink($tag_id,$account_id)
+    {
+        $account_id = intval($account_id);
+        $tag_id = intval($tag_id);
+
+        TagAccount::UnlinkTag($tag_id, $account_id);
+
+        $tagProvider = self::setTagProvider($account_id);
+
+        return $this->renderPartial('tag_account', [
+            'accountProvider' => $tagProvider,
+        ]);
+
     }
 
     /**
@@ -75,8 +110,22 @@ class AccountController extends Controller
      */
     public function actionView($id)
     {
+        $id = intval($id);
+
+        $tagProvider = self::setTagProvider($id);
+        $model = $this->findModel($id);
+        $personAccount = $model->getPersonAccount()->one();
+
+        $isEmpty = empty($personAccount);
+        $person = new Person();
+        if(!$isEmpty){
+            $person = Person::findOne($personAccount->person_id);
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'tagProvider' => $tagProvider,
+            'person'=>$person
         ]);
     }
 
@@ -111,8 +160,13 @@ class AccountController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+
+            $id = intval($id);
+            $tagProvider = self::setTagProvider($id);
+
             return $this->render('update', [
                 'model' => $model,
+                'tagProvider' => $tagProvider
             ]);
         }
     }
@@ -144,5 +198,85 @@ class AccountController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * @return ActiveDataProvider
+     * @internal param $id
+     */
+    private static function setAccountProvider(): ActiveDataProvider
+    {
+        $query = (new Query())
+            ->select([
+                'is_hidden'=>'a.is_hidden',
+                'account_id' => 'a.id',
+                'service' => 's.code',
+                'login' => 'a.login',
+                'password' => 'a.password',
+                'description' => 'a.description',
+            ])
+            ->from('account a')
+            ->innerJoin('service s', 'a.service_id = s.id')
+            ->leftJoin('person_account pa', 'a.id = pa.account_id')
+            ->where('pa.account_id IS NULL');
+
+        $accountProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+        ]);
+
+        $accountProvider->setSort([
+            'attributes' => [
+                'is_hidden',
+                'service',
+                'login',
+                'password',
+                'description',
+            ],
+            'defaultOrder' => ['service' => SORT_DESC],
+        ]);
+
+        return $accountProvider;
+    }
+
+    /**
+     * @param $accountId
+     * @return ActiveDataProvider
+     */
+    private static function setTagProvider(int $accountId): ActiveDataProvider
+    {
+
+        $query = (new Query())
+            ->select([
+                'account_id' => 'ta.account_id',
+                'tag_id' => 'ta.tag_id',
+                'code' => 't.code',
+                'title' => 't.title',
+                'description' => 't.description',
+            ])
+            ->from('account a')
+            ->innerJoin('tag_account ta', 'a.id = ta.account_id')
+            ->innerJoin('tag t', 'ta.tag_id = t.id')
+            ->where('a.id = :ID', ['ID' => $accountId]);
+
+        $accountProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        $accountProvider->setSort([
+            'attributes' => [
+                'code',
+                'title',
+                'description',
+            ],
+            'defaultOrder' => ['code' => SORT_DESC],
+        ]);
+
+        return $accountProvider;
     }
 }

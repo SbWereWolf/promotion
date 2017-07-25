@@ -1,9 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Person */
+/* @var $accountProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Update Person: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'People', 'url' => ['index']];
@@ -18,4 +20,24 @@ $this->params['breadcrumbs'][] = 'Update';
         'model' => $model,
     ]) ?>
 
+    <p>
+        <?= Html::a('Добавить аккаунт', ['account/link', 'person_id' => $model->id], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php Pjax::begin(
+        [
+            'id' => 'pjax-grid-view',
+            'linkSelector' => '.pjax-reload',
+            'timeout'=>9999
+        ]
+    ); ?>
+<?=
+
+    $this->render('person_account', [
+    'accountProvider' => $accountProvider,
+    ]);
+
+    ?>
+
+    <?php Pjax::end(); ?>
 </div>

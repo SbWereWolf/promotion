@@ -2,19 +2,56 @@
 
 namespace backend\controllers;
 
-use Yii;
+use backend\models\Account;
 use backend\models\Tag;
 use backend\models\TagSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * TagController implements the CRUD actions for Tag model.
  */
 class TagController extends Controller
 {
+    private static function setTagProvider(int $account_id): ActiveDataProvider
+    {
+        $query = (new Query())
+            ->select([
+                'is_hidden' => 't.is_hidden',
+                'tag_id' => 't.id',
+                'code' => 't.code',
+                'title' => 't.title',
+                'description' => 't.description',
+            ])
+            ->from('tag t')
+            ->where('NOT EXISTS(SELECT NULL FROM tag_account ta WHERE ta.tag_id = t.id AND ta.account_id = :ID)',
+                ['ID' => $account_id]);
+
+        $accountProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+        ]);
+
+        $accountProvider->setSort([
+            'attributes' => [
+                'is_hidden',
+                'code',
+                'title',
+                'description',
+            ],
+            'defaultOrder' => ['code' => SORT_DESC],
+        ]);
+
+        return $accountProvider;
+    }
+
     /**
      * @inheritdoc
      */
@@ -25,7 +62,7 @@ class TagController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index', 'view', 'link'],
                         'allow' => true,
                     ],
                     [
@@ -42,6 +79,30 @@ class TagController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     * Lists all Tag models.
+     * @param $account_id
+     * @return mixed
+     */
+    public function actionLink($account_id)
+    {
+
+        $account_id = intval($account_id);
+
+        $searchModel = new TagSearch();
+        $dataProvider = self::setTagProvider($account_id);
+
+        $account = Account::find()->where('id = :ID', ['ID' => $account_id])->one();
+
+        return $this->render('link', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'account_id' => $account_id,
+            'account' => $account,
+        ]);
+
     }
 
     /**

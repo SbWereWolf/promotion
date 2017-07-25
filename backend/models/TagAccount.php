@@ -56,6 +56,47 @@ class TagAccount extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param array $keys
+     * @param int $account_id
+     * @internal param $person_id
+     */
+    public static function linkAccountWithTag(array $keys, int $account_id)
+    {
+        foreach ($keys as $tag_id) {
+            $model = new TagAccount();
+            $model->tag_id = $tag_id;
+            $model->account_id = $account_id;
+            $model->save();
+        }
+    }
+
+    /**
+     * @param int $tag_id
+     * @param int $account_id
+     * @return int
+     */
+    public static function UnlinkTag(int $tag_id,int $account_id):int
+    {
+        $model = TagAccount::find()
+            ->where('tag_id = :TAG AND account_id = :ACCOUNT',
+                ['TAG' => $tag_id, 'ACCOUNT' => $account_id])
+            ->one();
+
+        $isEmpty = empty($model);
+        $deleteResult = false;
+        if (!$isEmpty) {
+            $deleteResult = $model->delete();
+        }
+
+        $result = -1;
+        if ($deleteResult !== false ){
+            $result = $deleteResult;
+        }
+
+        return $result;
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getAccount()

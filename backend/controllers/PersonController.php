@@ -2,13 +2,16 @@
 
 namespace backend\controllers;
 
-use Yii;
 use backend\models\Person;
+use backend\models\PersonAccount;
 use backend\models\PersonSearch;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PersonController implements the CRUD actions for Person model.
@@ -25,11 +28,11 @@ class PersonController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view','update','create','unlink'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index','view','create','update','delete'],
+                        'actions' => ['index','view','create','update','delete','unlink'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -42,6 +45,21 @@ class PersonController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionUnlink($person_id,$account_id)
+    {
+        $account_id = intval($account_id);
+        $person_id = intval($person_id);
+
+        PersonAccount::UnlinkAccount($person_id, $account_id);
+
+        $accountProvider = self::setAccountProvider($person_id);
+
+        return $this->renderPartial('person_account', [
+            'accountProvider' => $accountProvider,
+        ]);
+
     }
 
     /**
@@ -66,8 +84,16 @@ class PersonController extends Controller
      */
     public function actionView($id)
     {
+        $id = intval($id);
+
+        $accountProvider = self::setAccountProvider($id);
+
+        $loginString = Person::findOne($id)->getLoginString();
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'accountProvider' => $accountProvider,
+            'loginString'=>$loginString,
         ]);
     }
 
@@ -102,8 +128,13 @@ class PersonController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+
+            $id = intval($id);
+            $accountProvider = self::setAccountProvider($id);
+
             return $this->render('update', [
                 'model' => $model,
+                'accountProvider' => $accountProvider,
             ]);
         }
     }
@@ -135,5 +166,47 @@ class PersonController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * @param $id
+     * @return ActiveDataProvider
+     */
+    private static function setAccountProvider(int $id): ActiveDataProvider
+    {
+
+        $query = (new Query())
+            ->select([
+                'account_id' => 'pa.account_id',
+                'person_id' => 'pa.person_id',
+                'service' => 's.code',
+                'login' => 'a.login',
+                'password' => 'a.password',
+                'description' => 'a.description',
+            ])
+            ->from('person p')
+            ->innerJoin('person_account pa', 'p.id = pa.person_id')
+            ->innerJoin('account a', 'pa.account_id = a.id')
+            ->innerJoin('service s', 'a.service_id = s.id')
+            ->where('p.id = :ID', ['ID' => $id]);
+
+        $accountProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+
+        $accountProvider->setSort([
+            'attributes' => [
+                'service',
+                'login',
+                'password',
+                'description',
+            ],
+            'defaultOrder' => ['service' => SORT_DESC],
+        ]);
+
+        return $accountProvider;
     }
 }

@@ -12,8 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'insert_date')->textInput() ?>
-
     <?= $form->field($model, 'is_hidden')->checkbox() ?>
 
     <?= $form->field($model, 'code')->textarea(['rows' => 6]) ?>

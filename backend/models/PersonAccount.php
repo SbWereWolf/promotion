@@ -56,6 +56,46 @@ class PersonAccount extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $person_id
+     * @param $account_id
+     * @return int
+     */
+    public static function UnlinkAccount(int $person_id, int $account_id):int
+    {
+        $model = PersonAccount::find()
+            ->where('person_id = :PERSON AND account_id = :ACCOUNT',
+                ['PERSON' => $person_id, 'ACCOUNT' => $account_id])
+            ->one();
+
+        $isEmpty = empty($model);
+        $deleteResult = false;
+        if (!$isEmpty) {
+            $deleteResult = $model->delete();
+        }
+
+        $result = -1;
+        if ($deleteResult !== false ){
+            $result = $deleteResult;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $keys
+     * @param $person_id
+     */
+    public static function linkAccountWithPerson($keys, $person_id)
+    {
+        foreach ($keys as $account_id) {
+            $model = new PersonAccount();
+            $model->account_id = $account_id;
+            $model->person_id = $person_id;
+            $model->save();
+        }
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getAccount()

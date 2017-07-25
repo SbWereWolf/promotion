@@ -25,7 +25,7 @@ class TagAccountController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view','link'],
                         'allow' => true,
                     ],
                     [
@@ -42,6 +42,23 @@ class TagAccountController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionLink()
+    {
+        if (isset($_POST['key_list']) && isset($_POST['account_id'])) {
+            $keys = $_POST['key_list'];
+            $account_id = $_POST['account_id'];
+
+            $isArray = is_array($keys);
+            if(!$isArray){
+                $keys = array();
+            }
+
+            $account_id = intval($account_id);
+
+            TagAccount::linkAccountWithTag($keys, $account_id);
+        }
     }
 
     /**

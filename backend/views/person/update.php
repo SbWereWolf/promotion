@@ -24,7 +24,13 @@ $this->params['breadcrumbs'][] = 'Update';
         <?= Html::a('Добавить аккаунт', ['account/link', 'person_id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php Pjax::begin(['id' => 'pjax-grid-view']); ?>
+    <?php Pjax::begin(
+        [
+            'id' => 'pjax-grid-view',
+            'linkSelector' => '.pjax-reload',
+            'timeout'=>9999
+        ]
+    ); ?>
 <?=
 
     $this->render('person_account', [

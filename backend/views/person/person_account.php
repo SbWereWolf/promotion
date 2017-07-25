@@ -27,7 +27,13 @@ use yii\helpers\Html;
             [
                 'label' => 'Удалить',
                 'content'=>function($data){
-                    return Html::a('Удалить', ['person/unlink', 'account_id' => $data['account_id'],'person_id' => $data['person_id']]);
+                    return Html::a('Удалить',
+                        [
+                            'person/unlink',
+                            'account_id' => $data['account_id'],
+                            'person_id' => $data['person_id']
+                        ],
+                        ['class' => 'pjax-reload']);
                 }
             ],
 

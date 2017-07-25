@@ -2,16 +2,16 @@
 
 namespace backend\controllers;
 
-use backend\models\PersonAccount;
-use Yii;
 use backend\models\Person;
+use backend\models\PersonAccount;
 use backend\models\PersonSearch;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * PersonController implements the CRUD actions for Person model.
@@ -49,19 +49,12 @@ class PersonController extends Controller
 
     public function actionUnlink($person_id,$account_id)
     {
-
         $account_id = intval($account_id);
         $person_id = intval($person_id);
 
-/*
-        PersonAccount::find()
-            ->where('person_id = :PERSON AND account_id = :ACCOUNT',
-            ['PERSON'=>$person_id,'ACCOUNT'=>$account_id])
-            ->one()
-            ->delete();
-        */
+        PersonAccount::UnlinkAccount($person_id, $account_id);
 
-        $accountProvider = $this->setAccountProvider($person_id);
+        $accountProvider = self::setAccountProvider($person_id);
 
         return $this->renderPartial('person_account', [
             'accountProvider' => $accountProvider,
@@ -91,11 +84,16 @@ class PersonController extends Controller
      */
     public function actionView($id)
     {
-        $accountProvider = $this->setAccountProvider($id);
+        $id = intval($id);
+
+        $accountProvider = self::setAccountProvider($id);
+
+        $loginString = Person::findOne($id)->getLoginString();
 
         return $this->render('view', [
             'model' => $this->findModel($id),
             'accountProvider' => $accountProvider,
+            'loginString'=>$loginString,
         ]);
     }
 
@@ -130,7 +128,9 @@ class PersonController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            $accountProvider = $this->setAccountProvider($id);
+
+            $id = intval($id);
+            $accountProvider = self::setAccountProvider($id);
 
             return $this->render('update', [
                 'model' => $model,
@@ -172,9 +172,8 @@ class PersonController extends Controller
      * @param $id
      * @return ActiveDataProvider
      */
-    private function setAccountProvider($id):ActiveDataProvider
+    private static function setAccountProvider(int $id): ActiveDataProvider
     {
-        $id = intval($id);
 
         $query = (new Query())
             ->select([
@@ -200,22 +199,10 @@ class PersonController extends Controller
 
         $accountProvider->setSort([
             'attributes' => [
-                'service' => [
-                    'asc' => ['service' => SORT_ASC],
-                    'desc' => ['service' => SORT_DESC],
-                ],
-                'login' => [
-                    'asc' => ['login' => SORT_ASC],
-                    'desc'=> ['login' => SORT_DESC],
-                ],
-                'password' => [
-                    'asc' => ['password' => SORT_ASC],
-                    'desc'=> ['password' => SORT_DESC],
-                ],
-                'description' => [
-                    'asc' => ['description' => SORT_ASC],
-                    'desc'=> ['description' => SORT_DESC],
-                ],
+                'service',
+                'login',
+                'password',
+                'description',
             ],
             'defaultOrder' => ['service' => SORT_DESC],
         ]);

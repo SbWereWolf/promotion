@@ -22,6 +22,7 @@ $this->title = 'ROBOTS Corporation Inventory';
             <div class="col-lg-2">
                 <h2>Person</h2>
                 <p>Люди используют Сервисы с помощью Аккаунтов.</p>
+                <p><a class="btn btn-default" href="<?= Url::to(['person/index']); ?>">Работать с Людьми</a></p>
             </div>
             <div class="col-lg-2">
                 <h2>Сервисы</h2>

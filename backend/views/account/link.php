@@ -29,28 +29,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'description:ntext',
             ],
         ]) ?>
-
-        <p>
-            <?= Html::button('Добавить аккаунт', ['class' => 'btn btn-success link-account', 'onclick' => 'link_account_with_person()']) ?>
-            <?= Html::a('Отмена', ['person/view', 'id' => $person->id], ['class' => 'btn btn-danger']) ?>
-        </p>
     </div>
 
     <div>
+        <p>
+            <?= Html::button('Добавить аккаунт', ['class' => 'btn btn-success link-account']) ?>
+            <?= Html::a('Отмена', ['person/view', 'id' => $person->id], ['class' => 'btn btn-danger']) ?>
+        </p>
+
         <?php Pjax::begin(); ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'id' => 'account-grid',
+            'rowOptions' => function ($model, $key, $index, $grid) {
+                return [
+                    'data' => ['key' => $model['account_id']]
+                ];
+            },
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-                [
-                    'class' => 'yii\grid\CheckboxColumn',
-                    'checkboxOptions' => function ($model, $key, $index, $column) {
-                        return ['value' => $model['account_id']];
-                    }
-                ],
+                ['class' => 'yii\grid\CheckboxColumn'],
 
                 'is_hidden:boolean',
                 'service:text:Сервис',

@@ -76,8 +76,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'code:html:Пароль',
-            'title:html:Пароль',
+            'code:html:Код',
+            'title:html:Наименование',
             'description:ntext:Примечание',
 
         ],
